@@ -1,0 +1,13 @@
+The following libraries are required to run
+
+
+sqlite3
+
+pandas
+
+numpy
+
+matplotlib
+
+scipy
+
