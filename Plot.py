@@ -1,5 +1,9 @@
 
+<<<<<<< HEAD
 import numpy as np
+=======
+import numpy as numpy
+>>>>>>> a1e1b59fdcf11e0263e50424555168c866ed151e
 import pandas
 import matplotlib
 import matplotlib.pyplot as plt
@@ -11,4 +15,8 @@ plt.plot(time, testData)
 
 plt.xlabel("Time")
 plt.ylabel("Flow Rate")
+<<<<<<< HEAD
 plt.show()
+=======
+plt.show()
+>>>>>>> a1e1b59fdcf11e0263e50424555168c866ed151e
