@@ -8,7 +8,7 @@ MAX_FLOW_RATE = 25
 x = []
 flow_rate = []
     
-plt.title("Flow rate (L/s) vs time (s)")
+plt.title("Flow rate (L/min) vs time (s)")
 plt.xlabel("Time (s)")
 plt.ylabel("Flow rate (L/min)")
 plt.ylim(0, MAX_FLOW_RATE)
@@ -26,7 +26,7 @@ def init_data(t):
 def dequeue_insert(data, y):
     for i in range(len(data) - 1):
         data[i] = data[i + 1]
-        data[len(data) - 1] = y
+    data[len(data) - 1] = y
     
     return data
 
