@@ -19,6 +19,8 @@ mcp = MCP.MCP3008(spi, cs)
 # create a differential ADC channel between Pin 0 and Pin 1
 chan = AnalogIn(mcp, MCP.P0, MCP.P1)
 
+from time import sleep
+import datetime as dt
 
 def calc_flow_rate(period):
 	FLOWMETER_SPECIFICATION = 11;
@@ -26,10 +28,11 @@ def calc_flow_rate(period):
 
 falling = 0
 time = 0
-TIMESTEP = 5
+TIMESTEP = 0.002
 MARGIN_OF_ERROR = 0.01
+TIMEOUT = 0.2
 
-prev_state = 1
+prev_state = 0
 
 flow_rates = []
 
@@ -37,14 +40,23 @@ try:
 	while(True):
 		sleep(TIMESTEP)
 		time += TIMESTEP
+		#print(chan.voltage)
 		
-		if(chan.value < MARGIN_OF_ERROR):
+		if(time - falling > TIMEOUT): # if no flow
+			falling = time
+			if(len(flow_rates) >= 2):
+				if(flow_rates[-2][0] == 0 and flow_rates[-1][0] == 0):
+					# if no water has been flowing
+					flow_rates.pop()
+			flow_rates.append((0, dt.datetime.now()))
+
+
+		if(chan.voltage < MARGIN_OF_ERROR):
 			if(prev_state == 1):
 				prev_state = 0
-				
-				# only append if flow occurs
-				if(time - falling < 200):
-					flow_rates.append(calc_flow_rate(time - falling))
+				flow = calc_flow_rate(time - falling)
+				flow_rates.append((flow, dt.datetime.now()))
+				print(str(flow) + " " + str(time - falling) + " " + str(chan.voltage))
 				falling = time
 				
 		else:
@@ -52,5 +64,6 @@ try:
 				prev_state = 1;
 except:
 	print(flow_rates)
+
 
 
