@@ -7,7 +7,7 @@ database_name = "water.db"
 conn = None
 
 RANGE_QUERY = "SELECT timestamp, flow FROM water_flow WHERE timestamp BETWEEN '{}' AND '{}'"
-INSERT_QUERY = "INSERT INTO water_flow VALUES ('{}', '{}')"
+INSERT_QUERY = "INSERT INTO water_flow (timestamp, flow) VALUES ('{}', '{}')"
 
 # ---------------------------------------------------------------------------------------
 # DATABASE ACCESS
@@ -55,6 +55,8 @@ def close_db():
 
 def insert_flow(flow, timestamp):
 	db = access_db()
+	print(flow)
+	print(timestamp)
 	query(db, INSERT_QUERY.format(flow, timestamp))
 	return
 

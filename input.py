@@ -62,13 +62,14 @@ try:
 				flow = calc_flow_rate(time - falling)
 				flow_rates.append((flow, dt.datetime.now()))
 				sql.insert_flow(flow, dt.datetime.now())
-				#print(str(flow) + " " + str(time - falling) + " " + str(chan.voltage))
+				print(str(flow) + " " + str(time - falling) + " " + str(chan.voltage))
 				falling = time
 				
 		else:
 			if(prev_state == 0):
 				prev_state = 1;
-except:
+except Exception as e:
+	print(e)
 	print(flow_rates)
 
 
