@@ -58,6 +58,7 @@ def insert_flow(flow, timestamp):
 	print(flow)
 	print(timestamp)
 	query(db, INSERT_QUERY.format(flow, timestamp))
+	save_changes()
 	return
 
 # NOTE: These functions assume that time_start and time_end both follow this format:

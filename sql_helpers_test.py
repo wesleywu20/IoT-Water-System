@@ -42,3 +42,15 @@ for time in times:
 print(type(flows)) # list
 for flow in flows:
 	print(flow)
+
+# ---------------------------------------------------------------------------------------
+# insert_flow(flow, timestamp)
+
+db.insert_flow(4, "2021-04-09 19:40:27")
+db.insert_flow(5, "2021-04-09 19:40:27.683818")
+
+
+db.close_db()
+
+
+
