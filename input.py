@@ -34,7 +34,7 @@ falling = 0
 time = 0
 TIMESTEP = 0.002
 MARGIN_OF_ERROR = 0.01
-TIMEOUT = 0.2
+TIMEOUT = 1
 
 prev_state = 0
 
