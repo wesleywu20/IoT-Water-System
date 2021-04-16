@@ -11,13 +11,18 @@ ax1 = fig.add_subplot(1,1,1)
 def animate(i):
     data = open('water.txt','r').read()
     lines = data.split('\n')
+    print(lines);
     xs = []
     ys = []
 
+
     for line in lines:
-        x, y = line.split(',') # Delimiter is comma
-        xs.append(x)
-        ys.append(y)
+        if line:
+            word=line.split(",")
+            if (len(word)>1):
+                ys.append((float(word[1])))
+                xs.append((word[0]))
+
 
 
     ax1.clear()
@@ -27,6 +32,6 @@ def animate(i):
     plt.ylabel('Water temperature')
     plt.title('Water temperature vs. Date')
 
-
+    plt.autoscale()
 ani = animation.FuncAnimation(fig, animate, interval=1000)
 plt.show()
