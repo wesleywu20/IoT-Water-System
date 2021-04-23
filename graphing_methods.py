@@ -3,13 +3,14 @@ import matplotlib.pyplot as plt
 import scipy as sp
 import pandas as pd
 import time
+import scipy.integrate as integrate
 
 MAX_FLOW_RATE = 25
 x = []
 flow_rate = []
 int_flow_rate = []
 sensor_on = 1
-    
+
 plt.ion()
 
 figure, ax = plt.subplots(2, figsize=(7, 5))
@@ -33,10 +34,16 @@ ax[1].set_ylabel("Volume (L)")
     and initially contain only 0s
 """
 def init_data(t):
+    global x
+    global flow_rate
+    global int_flow_rate
+    global figure
+    global ax
     x = [i for i in range(t)]
-    plt.xlim(0, t)
+    ax[0].set_xlim(0, t)
+    ax[1].set_xlim(0, t)
     flow_rate = np.zeros(t)
-    int_flow_rate = np.zeros(
+    int_flow_rate = np.zeros(t)
         
 """
     This function allows you to
@@ -71,11 +78,14 @@ def dequeue_insert(data, y):
         update_graph(x_data, new_y_data)
         time.sleep(0.1)
 """
-def update_graph(x_data, new_y_data):
+def update_graph(new_y_data):
+    global flow_rate
+    global int_flow_rate
+    global x
     flow_rate = dequeue_insert(flow_rate, new_y_data)
     int_flow_rate = dequeue_insert(int_flow_rate, integrate.simpson(flow_rate))
 
-    line.set_xdata(x_data)
+    line.set_xdata(x)
     line.set_ydata(flow_rate)
 
     integral.set_xdata(x)
@@ -83,5 +93,6 @@ def update_graph(x_data, new_y_data):
     ax[1].set_ylim(0, max(int_flow_rate) + 100)
 
     figure.canvas.draw()
+    plt.savefig("test.png")
 
     figure.canvas.flush_events()
