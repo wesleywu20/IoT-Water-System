@@ -5,7 +5,7 @@ import time
 ''' This code is not finished - this is just a skeleton/pseudocode for integrating with other parts of the program '''
 ''' Each piece of the code could be implemented as a function and called by a different program that outputs the data in a visual format '''
 
-#sample data
+# sample data
 timeData = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
 flowData = [30, 32, 33, 34, 34, 37, 41, 46, 43, 48, 49, 50, 50, 51, 56, 57, 56, 63, 78, 67]
 tempData = [40, 50, 60, 50, 40, 60, 34, 65, 64, 34, 56, 46, 75, 54]
