@@ -44,10 +44,10 @@ else
     ''' Only calculate when desired, or always calculate? Or perhaps at the end of each session '''
 
 # Times that water (or IoT water system) is most commonly used
-''' For this function, perhaps we could do approximate times or time ranges, and print the mode or the top few times ''
+''' For this function, perhaps we could do approximate times or time ranges, and print the mode or the top few times '''
 
 # Total amount of water used over all time
-netWaterUsed = waterUsed + netWaterUsed # netWaterUsed from database
+netWaterUsed = waterUsed + netWaterUsed from database
 
 # Average water temperature over all time
 ''' do something similar to the other running averages, but multiply the pre-existing average by a much larger number of values '''
@@ -55,4 +55,3 @@ netTempMean = (tempMean + netTempMean * totalTimeClocked)/2
 
 # Comparison of water usage metrics in some sort of visual display, i.e. plot average temperature for each time the system is used?
 ''' send values back to plotting program ? '''
-
