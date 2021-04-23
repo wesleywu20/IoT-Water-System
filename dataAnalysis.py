@@ -4,6 +4,8 @@ import time
 
 ''' This code is not finished - this is just a skeleton/pseudocode for integrating with other parts of the program '''
 ''' Each piece of the code could be implemented as a function and called by a different program that outputs the data in a visual format '''
+''' Or, the program could generate a list of variables that are fed into another program wtih each new graph frame, 
+    and used by the other program to update the display for the user '''
 
 # sample data
 timeData = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
@@ -17,7 +19,7 @@ tempData = [40, 50, 60, 50, 40, 60, 34, 65, 64, 34, 56, 46, 75, 54]
 flowMean = numpy.mean(flowData) + prev_flow_mean * number_of_values_per_frame)/2
 print("The average flow rate for the session is", flowMean)
 
-'''  For total water used, add current result to result from previous frame. '''
+''' For total water used, add current result to result from previous frame. '''
 # Total water used throughout session - integral of flow rate over time
 waterUsed = numpy.trapz(flowData) + prev_water_used
 print("You used", waterUsed, "Liters of water")
@@ -26,8 +28,8 @@ print("You used", waterUsed, "Liters of water")
 tempMean = (numpy.mean(tempData) + prev_temp_mean * number_of_values_per_frame)/2
 print(tempMean)
 
-'''For range, retreive previous max and min values and compare with current values. 
-   Store new max and min values from new values + previous max and min for next frame use'''
+''' For range, retreive previous max and min values and compare with current values. 
+    Store new max and min values from new values + previous max and min for next frame use '''
 # Range of water temperatures
 maxComp = [prev_max_value, numpy.amax(tempData)]
 minComp = [prev_min_value, numpy.amain(tempData)]
@@ -36,15 +38,18 @@ print(tempRange)
 
 # Signifier that water is running
 if final_data_point(s) == 0
-    water_not_running
+    waterRunning = 1
 else
-    water_running
+    waterRunning = 0
 
 ''' Data that spans beyond the current session '''
     ''' Only calculate when desired, or always calculate? Or perhaps at the end of each session '''
 
 # Times that water (or IoT water system) is most commonly used
 ''' For this function, perhaps we could do approximate times or time ranges, and print the mode or the top few times '''
+    ''' Get time data from database and find time range with most times water used '''
+    ''' Could do something very simple, like using half-hour blocks of time 
+            (A more complex approach would be to find a time range that balances range size and usage level, but that might not be ideal for this project)  '''
 
 # Total amount of water used over all time
 netWaterUsed = waterUsed + netWaterUsed from database
