@@ -12,14 +12,14 @@ INSERT_QUERY = "INSERT INTO water_flow (timestamp, flow) VALUES ('{}', '{}')"
 
 GET_AVG_QUERY = "SELECT value FROM meta WHERE name = 'avg'"
 GET_LAST_UPDATED_QUERY = "SELECT value from meta WHERE name = 'last_updated'"
-GET_TOTAL_QUERY = "SELECT value from meta WHERE name = 'total'"
+GET_TOTAL_QUERY = "SELECT value from meta WHERE name = 'net'"
 GET_HIST_INDEX_QUERY = "SELECT value from meta WHERE name = 'hist{}'"
 GET_MAX_QUERY = "SELECT value from meta WHERE name = 'max'"
 GET_NUM_VALUES_QUERY = "SELECT value from meta WHERE name = 'num_values'"
 
 SET_AVG_QUERY = "UPDATE meta SET value='{}' WHERE name = 'avg'"
 SET_LAST_UPDATED_QUERY = "UPDATE meta SET value='{}' WHERE name = 'last_updated'"
-SET_TOTAL_QUERY = "UPDATE meta SET value='{}' WHERE name = 'total'"
+SET_TOTAL_QUERY = "UPDATE meta SET value='{}' WHERE name = 'net'"
 SET_HIST_INDEX_QUERY = "UPDATE meta SET value='{}' WHERE name = 'hist{}'"
 SET_MAX_QUERY = "UPDATE meta SET value='{}' WHERE name = 'max'"
 SET_NUM_VALUES_QUERY = "UPDATE meta SET value='{}' WHERE name = 'num_values'"
@@ -28,7 +28,7 @@ SET_NUM_VALUES_QUERY = "UPDATE meta SET value='{}' WHERE name = 'num_values'"
 # ---------------------------------------------------------------------------------------
 # HELPER
 
-def dt_to_string(time):
+def str_to_dt(time):
 	return dt.datetime.strptime(time, '%Y-%m-%d %H:%M:%S.%f')
 
 
@@ -108,19 +108,20 @@ def get_range(time_start, time_end):
 	times = list(df['timestamp'])
 	datetimes = []
 	for time in times:
-		datetimes.append(dt_to_string(time))
+		datetimes.append(str_to_dt(time))
 	
 	return (datetimes, list(df['flow']))
 
 
 # returns tuple of (old_avg, last_updated) of types (double, datetime)
-def get_old_avg():
+def get_avg():
 	db = access_db()
-	return query(db, GET_AVG_QUERY)[0][0]
+	avg = query(db, GET_AVG_QUERY)[0][0]
+	return float(avg)
 
 
 # sets the old average stored in the database
-def set_old_avg(avg):
+def set_avg(avg):
 	db = access_db()
 	query(db, SET_AVG_QUERY.format(avg))
 
@@ -128,7 +129,7 @@ def set_old_avg(avg):
 # returns tuple of (old_avg, last_updated) of types (double, datetime)
 def get_num_values():
 	db = access_db()
-	return query(db, GET_NUM_VALUES_QUERY)[0][0]
+	return int(query(db, GET_NUM_VALUES_QUERY)[0][0])
 
 
 # sets the old average stored in the database
@@ -141,7 +142,7 @@ def set_num_values(num_values):
 # returns tuple of (total, last_updated) of types (double, datetime)
 def get_total():
 	db = access_db()
-	return query(db, GET_TOTAL_QUERY)[0][0]
+	return float(query(db, GET_TOTAL_QUERY)[0][0])
 
 
 # sets the total stored in the database
@@ -153,7 +154,7 @@ def set_total(total):
 # returns tuple of (max, last_updated) of types (double, datetime)
 def get_max():
 	db = access_db()
-	return query(db, GET_MAX_QUERY)[0][0]
+	return float(query(db, GET_MAX_QUERY)[0][0])
 
 
 # sets the max stored in the database
@@ -167,7 +168,7 @@ def set_max(maximum):
 def get_hist_index(index):
 	db = access_db()
 	print(GET_HIST_INDEX_QUERY.format(index))
-	return query(db, GET_HIST_INDEX_QUERY.format(index))[0][0]
+	return float(query(db, GET_HIST_INDEX_QUERY.format(index))[0][0])
 
 
 # sets the histogram value at an index stored in the database
@@ -192,7 +193,7 @@ def set_hist(hist):
 
 def get_last_updated():
 	db = access_db()
-	return dt_to_string(query(db, GET_LAST_UPDATED_QUERY)[0][0])
+	return str_to_dt(query(db, GET_LAST_UPDATED_QUERY)[0][0])
 	
 def set_last_updated(dt):
 	db = access_db()
