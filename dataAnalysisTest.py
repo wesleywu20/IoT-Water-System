@@ -14,7 +14,6 @@ import dataAnalysis as dA
 flowData = [1,2,3,4,5,6,7,8,9,0,2,14,6,7,3,2,4,7,3,4,4,3,14,13,23,12,10]
 numValues = len(flowData)
 prevFlowMean = 0
-callNum = 0
 freq = 30000
 prevWaterUsed = 1
 prevMaxFlow = 18.67
@@ -28,7 +27,7 @@ totalNumValues = 100
 
 # ============ Testing of session-scope functions: ============
 
-flowMean = dA.meanFlowRate(prevFlowMean, flowData, numValues, callNum)
+flowMean = dA.meanFlowRate(prevFlowMean, flowData, numValues)
 print("Your mean flow rate is", flowMean, "Liters per minute")
 prevFlowMean = flowMean
 
