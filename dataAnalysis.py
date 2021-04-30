@@ -1,15 +1,14 @@
 import numpy as np
 import sql_helpers as db
-#from datetime import datetime, timedelta
+from datetime as dt
 
-callNum = 0
 
 ''' For each new graph frame generated, calculate the following data '''
 
 ''' Variables passed into functions from caller: '''
 # flowData = flow data points from database since start of desired window
 # numValues = number of values since the start of desired window - i.e. number of elements in flowData array: numValues = len(flowData)
-# callNum = the current iteration index of the caller program (frame number of graph) - starts at 1, maintained by caller - needs fixed window size
+# callNum = the current iteration index of the caller program (frame number of graph) - starts at 1, updated as global var - needs fixed window size
 
 # freq = approximate frequency per minute of data sampling - can be approximated, but should be rather high - used for integration
 
@@ -26,6 +25,8 @@ callNum = 0
 # flowTimes = times water is used from current session/frame/window from database
 
 ''' The following data will be updated each time the functions are iteratively called from the main program '''
+
+callNum = 1
 
 # =================== Data that exists within the current session: ===================
 
