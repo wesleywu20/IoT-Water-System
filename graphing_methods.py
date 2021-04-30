@@ -11,7 +11,8 @@ flow_rate = []
 int_flow_rate = []
 sensor_on = 1
 
-plt.ion()
+# comment out the line below if you don't want to see the plot display
+# plt.ion()
 
 figure, ax = plt.subplots(2, figsize=(7, 5))
 figure.tight_layout(pad = 5.0)
@@ -19,7 +20,7 @@ figure.tight_layout(pad = 5.0)
 line, = ax[0].plot(x, flow_rate)
 ax[0].set_title("Flow rate (L/s) vs time (s)")
 ax[0].set_xlabel("Time (s)")
-ax[0].set_ylabel("Flow rate (L/s)")
+ax[0].set_ylabel("Flow rate (L/m)")
 ax[0].set_ylim(0, MAX_FLOW_RATE)
 
 integral, = ax[1].plot(x, int_flow_rate)
@@ -92,7 +93,9 @@ def update_graph(new_y_data):
     integral.set_ydata(int_flow_rate)
     ax[1].set_ylim(0, max(int_flow_rate) + 100)
 
-    figure.canvas.draw()
-    plt.savefig("test.png")
+    #figure.canvas.draw()
+    plt.savefig("flow.png")
 
     figure.canvas.flush_events()
+        
+    
