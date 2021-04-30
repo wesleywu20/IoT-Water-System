@@ -74,9 +74,10 @@ def meanWater(flowMean, numValues, meanWaterUsed, totalNumValues):
     return meanWaterUsed
 
 # Update metadata in database with new values
-def updateMetaData(meanWaterUsed, numValues, totalNumValues, netWaterUsed, dt):
+def updateMetaData(meanWaterUsed, numValues, totalNumValues, netWaterUsed, histogram, dt):
     db.set_old_avg(meanWaterUsed, dt)
     # store netWaterUsed in database from sql helper function
     totalNumValues += numValues
     # store totalNumValues in database from sql helper function
+    # store histogram in database from sql helper function
     return
