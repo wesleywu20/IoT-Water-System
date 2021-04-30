@@ -3,6 +3,11 @@
     There are some new metaData values I would like to add to the database, which shouldn't be hard, and the program is already structured for them
     Database updating function is not done, but also should be easy to finish '''
 
+''' Values to be added to our metadata:
+    - Total water used over all time
+    - Total number of values in database to use in weighted mean calculations
+    - Histogram (?) - this is the one I wanted to talk to Justin about '''
+
 import numpy
 import matplotlib.pyplot as plt
 import time
@@ -70,7 +75,7 @@ def state(finalDataPoint):
         waterRunning = 1
     return waterRunning
 
-# Data that spans beyond the current session - Only calculate when desired, or always calculate? Or perhaps at the end of each session
+# Data that spans beyond the current session - Only calculate when desired, or perhaps at the end of each session
 
 # Times that water (or IoT water system) is most commonly used
 def usageTimes(timesUsed): # Pass in an array with all times water is used
