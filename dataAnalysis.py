@@ -1,12 +1,10 @@
-''' Unfortunately, I procrastinated on this and haven't done much work on it since last week, but everything is working except for a few things:
-    The average time used stuff isn't done because there are two ways we could implement it that I wanted to ask you about @Justin
+''' The average time used stuff isn't done because there are two ways we could implement it that I wanted to ask you about @Justin
     There are some new metaData values I would like to add to the database, which shouldn't be hard, and the program is already structured for them
     Database updating function is not done, but also should be easy to finish '''
 
 ''' Values to be added to our metadata:
     - Total water used over all time
-    - Total number of values in database to use in weighted mean calculations
-    - Histogram (?) - this is the one I wanted to talk to Justin about '''
+    - Total number of values in database to use in weighted mean calculations '''
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -19,7 +17,7 @@ from datetime import datetime, timedelta
 
 ''' Variables passed into functions from caller: '''
 # flowData = flow data points from database since start of session
-# numValues = number of values since the start of session - i.e. number of elements in flowData array: numValues = len(flowData)
+# numValues = number of NONZERO values since the start of session - i.e. number of elements in flowData array: numValues = len(flowData)
 # callNum = the current iteration index of the caller program (frame number of graph) - starts at 1, maintained by calelr
 
 # prevFlowMean = previous flow mean value for session still stored in looping caller function
@@ -29,7 +27,10 @@ from datetime import datetime, timedelta
 
 # timesUsed = time array with all times water is used from db
 # netWaterUsed = total amount of water used from db metadata
-# meanWaterUsed = total number of values in db from db metadata
+# meanWaterUsed = mean of all values in db from db metadata
+# totalNumValues = total number of NONZERO values in db from db metadata
+
+# flowTimes = times water is used from current session/frame/window from database
 
 # Running average flow rate
 def meanFlowRate(prevFlowMean, flowData, numValues, callNum): # Broken - need to fix to incorporate using a way to track iterations for session
@@ -37,14 +38,12 @@ def meanFlowRate(prevFlowMean, flowData, numValues, callNum): # Broken - need to
     wavg1 = np.mean(flowData) * numValues
     wavg2 = prevFlowMean * numValues * callNum
     flowMean = (wavg1 + wavg2)/totalNum
-    print("The average flow rate for the session is", flowMean)
     return flowMean
 
 ''' For total water used, add current result to result from previous frame. '''
 # Total water used throughout session - integral of flow rate over time
 def totalWaterUsed(prevWaterUsed, flowData):
     waterUsed = np.trapz(flowData) + prevWaterUsed
-    print("You used", waterUsed, "Liters of water")
     return waterUsed
 
 # Maximum flow rate attained throughout session
@@ -52,20 +51,6 @@ def maxFlow(prevMaxFlow, flowData):
     curMaxFlow = np.amax(flowData)
     newMaxFlow = curMaxFlow if curMaxFlow > prevMaxFlow else prevMaxFlow
     return newMaxFlow
-
-''' Keeping temperature functions in for now - keep if we have temperature sensor working later '''
-
-# Average temperature
-#def meanTemp(prevTempMean, tempData, numValues):
-
-''' For range, retreive previous max and min values and compare with current values. 
-    Store new max and min values from new values + previous max and min for next frame use '''
-# Range of water temperatures
-#def rangeTemp(prevMaxTemp, prevMinTemp, tempData):
-#    maxComp = [prevMaxTemp, np.amax(tempData)]
-#    minComp = [prevMinTemp, np.amain(tempData)]
-#    tempRange = np.amax(maxComp) - np.amin(minComp)
-#    print(tempRange)
 
 # Signifier that water is running
 def state(finalDataPoint):
@@ -75,18 +60,14 @@ def state(finalDataPoint):
         waterRunning = 1
     return waterRunning
 
-# Data that spans beyond the current session - Only calculate when desired, or perhaps at the end of each session
+# Data that spans beyond the current session:
 
 # Times that water (or IoT water system) is most commonly used
-def usageTimes(timesUsed): # Pass in an array with all times water is used
-    histogram = 0 * [48]
-    for i in range(len(timesUsed)):
-        hourIndex = timesUsed[i]
+def usageTimes(histogram, flowTimes): # Pass in an array with all times water is used
+    for i in range(len(flowtimes)):
+        hourIndex = flowTimes[i].hour - 1
         histogram[hourIndex] += 1
-    return
-
-# @Justin if we wanted to, this histogram array could be another piece of metadata that's stored in the database - this would make the calculation faster
-# We would then only update the histogram for the new time data from the current session, and we would have separate functions for updating hist and finding max    
+    return    
 
 # Total amount of water used over all time
 def totalWater(netWaterUsed, waterUsed): # Pass in waterUsed from caller rather than calling function
@@ -108,12 +89,3 @@ def updateMetaData(meanWaterUsed, numValues, totalNumValues, netWaterUsed):
     totalNumValues += numValues
     # store totalNumValues in databse
     return
-
-# Average water temperature over all time
-# do something similar to the other running averages, but multiply the pre-existing average by a much larger number of values
-#  def meanTemp():
-#    netTempMean = # weighted average of tempMean with netTempMean from database
-
-# Comparison of water usage metrics in some sort of visual display, i.e. plot average temperature for each time the system is used?
-# send values back to plotting program ?
-# do if we have time
