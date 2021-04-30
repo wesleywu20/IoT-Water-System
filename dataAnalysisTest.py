@@ -8,6 +8,8 @@
 ''' Some aspects of the program could be implemented in a more streamlined manner, like the variables being set
     after the print statements that could be set beforehand just as easily. However, this is kept for easy comprehensibility. '''
 
+import datetime as dt
+import numpy as np
 import dataAnalysis as dA
 
 # Iterative Values:
@@ -19,7 +21,12 @@ prevWaterUsed = 1
 prevMaxFlow = 18.67
 
 # MetaData Values:
-# flowTimes = time data from database
+flowTimes = ["2021-04-16 15:41:44.952130", "2021-04-16 15:41:45.266081", "2021-04-16 15:41:45.610755", "2021-04-16 15:41:45.957314",
+             "2021-04-16 15:41:46.302279", "2021-04-16 15:41:46.650486", "2021-04-16 15:41:46.692330", "2021-04-16 15:41:46.719504", 
+             "2021-04-16 15:41:46.745066", "2021-04-16 15:41:46.769784", "2021-04-16 15:41:46.795690", "2021-04-16 15:41:46.826209", 
+             "2021-04-16 15:41:46.859528", "2021-04-16 15:41:46.890260", "2021-04-16 15:41:46.915434", "2021-04-16 15:41:46.938503"]
+for i in range(len(flowTimes)):
+    flowTimes[i] = dt.datetime.strptime(flowTimes[i], '%Y-%m-%d %H:%M:%S.%f')
 histogram = 0 * [24]
 netWaterUsed = 3
 meanWaterUsed = 2
@@ -47,7 +54,9 @@ else:
 
 # ============ Testing of lifetime-scope functions: ============
 
-# testing for usageTimes needs time data
+histogram = dA.usageTimes(histogram, flowTimes)
+modeTime = np.amax(histogram) 
+print("You used water most commonly between", modeTime, "and", modeTime + 1, "o'clock")
 
 netWaterUsed = dA.totalWater(netWaterUsed, waterUsed)
 print("Since installing this system, you have used", netWaterUsed, "Liters of water")
