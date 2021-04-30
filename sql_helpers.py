@@ -116,54 +116,50 @@ def get_range(time_start, time_end):
 # returns tuple of (old_avg, last_updated) of types (double, datetime)
 def get_old_avg():
 	db = access_db()
-	return (query(db, GET_AVG_QUERY)[0][0], dt_to_string(query(db, GET_LAST_UPDATED_QUERY)[0][0]))
+	return query(db, GET_AVG_QUERY)[0][0]
 
 
 # sets the old average stored in the database
-def set_old_avg(avg, dt):
+def set_old_avg(avg):
 	db = access_db()
 	query(db, SET_AVG_QUERY.format(avg))
-	query(db, SET_LAST_UPDATED_QUERY.format(dt))
 
 
 # returns tuple of (old_avg, last_updated) of types (double, datetime)
 def get_num_values():
 	db = access_db()
-	return (query(db, GET_NUM_VALUES_QUERY)[0][0], dt_to_string(query(db, GET_LAST_UPDATED_QUERY)[0][0]))
+	return query(db, GET_NUM_VALUES_QUERY)[0][0]
 
 
 # sets the old average stored in the database
-def set_num_values(num_values, dt):
+def set_num_values(num_values):
 	db = access_db()
 	query(db, SET_NUM_VALUES_QUERY.format(num_values))
-	query(db, SET_LAST_UPDATED_QUERY.format(dt))
 
 
 
 # returns tuple of (total, last_updated) of types (double, datetime)
 def get_total():
 	db = access_db()
-	return (query(db, GET_TOTAL_QUERY)[0][0], dt_to_string(query(db, GET_LAST_UPDATED_QUERY)[0][0]))
+	return query(db, GET_TOTAL_QUERY)[0][0]
 
 
-# sets the old total stored in the database
-def set_total(total, dt):
+# sets the total stored in the database
+def set_total(total):
 	db = access_db()
 	query(db, SET_TOTAL_QUERY.format(total))
-	query(db, SET_LAST_UPDATED_QUERY.format(dt))
 
 
 # returns tuple of (max, last_updated) of types (double, datetime)
-def get_total():
+def get_max():
 	db = access_db()
-	return (query(db, GET_MAX_QUERY)[0][0], dt_to_string(query(db, GET_LAST_UPDATED_QUERY)[0][0]))
+	return query(db, GET_MAX_QUERY)[0][0]
 
 
 # sets the max stored in the database
-def set_total(maximum, dt):
+def set_max(maximum):
 	db = access_db()
 	query(db, SET_MAX_QUERY.format(maximum))
-	query(db, SET_LAST_UPDATED_QUERY.format(dt))
 
 
 
@@ -187,13 +183,18 @@ def get_hist():
 	return hist
 
 
-def set_hist(hist, dt):
+def set_hist(hist):
 	if(len(hist) != 24):
 		print("histogram has inappropriate length")
 	for i in range(24):
 		set_hist_index(i, hist[i])
+
+
+def get_last_updated():
+	db = access_db()
+	return dt_to_string(query(db, GET_LAST_UPDATED_QUERY)[0][0])
+	
+def set_last_updated(dt):
+	db = access_db()
 	query(db, SET_LAST_UPDATED_QUERY.format(dt))
-
-
-
 
