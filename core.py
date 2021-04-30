@@ -1,6 +1,6 @@
 import sql_helpers as db
 import dataAnalysis as dA
-#import graphing_methods
+import graphing_methods as graph
 import datetime as dt
 
 
@@ -35,6 +35,10 @@ def update_values(duration):
 
 	meanWaterUsed = dA.meanWater(flowMean, len(flowData), db.get_avg(), db.get_num_values())
 	print("The average water flow rate for all time is", meanWaterUsed, "Liters per minute")
-
+	
+	for flow in flowData:
+		graph.update_graph(flow)
+	
+graph.init_data(100)
 
 update_values(1000000000)
