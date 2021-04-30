@@ -1,8 +1,5 @@
 import numpy as np
-import matplotlib.pyplot as plt
-import time
 import sql_helpers as db
-from scipy import stats
 from datetime import datetime, timedelta
 
 ''' For each new graph frame generated, calculate the following data '''
@@ -11,6 +8,8 @@ from datetime import datetime, timedelta
 # flowData = flow data points from database since start of desired window
 # numValues = number of values since the start of desired window - i.e. number of elements in flowData array: numValues = len(flowData)
 # callNum = the current iteration index of the caller program (frame number of graph) - starts at 1, maintained by caller - needs fixed window size
+
+# freq = approximate frequency per minute of data sampling - can be approximated, but should be rather high - used for integration
 
 # prevFlowMean = previous flow mean value for session still stored in looping caller function
 # prevWaterUsed = prevous water used value for session still stored in looping caller function
@@ -33,8 +32,8 @@ def meanFlowRate(prevFlowMean, flowData, numValues, callNum):
     return flowMean
 
 # Total water used throughout session - integral of flow rate over time
-def totalWaterUsed(prevWaterUsed, flowData):
-    waterUsed = np.trapz(flowData) + prevWaterUsed
+def totalWaterUsed(prevWaterUsed, flowData, freq):
+    waterUsed = (np.trapz(flowData)/freq + prevWaterUsed)
     return waterUsed
 
 # Maximum flow rate attained throughout session
@@ -58,7 +57,7 @@ def usageTimes(histogram, flowTimes): # Pass in an array with all times water is
     for i in range(len(flowtimes)):
         hourIndex = flowTimes[i].hour - 1
         histogram[hourIndex] += 1
-    return
+    return histogram
 
 # Total amount of water used over all time
 def totalWater(netWaterUsed, waterUsed): # Pass in waterUsed from caller rather than calling function
