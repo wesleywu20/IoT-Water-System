@@ -1,6 +1,8 @@
 import numpy as np
 import sql_helpers as db
-from datetime import datetime, timedelta
+#from datetime import datetime, timedelta
+
+callNum = 0
 
 ''' For each new graph frame generated, calculate the following data '''
 
@@ -23,8 +25,14 @@ from datetime import datetime, timedelta
 
 # flowTimes = times water is used from current session/frame/window from database
 
+''' The following data will be updated each time the functions are iteratively called from the main program '''
+
+# =================== Data that exists within the current session: ===================
+
 # Running average flow rate for current user session
-def meanFlowRate(prevFlowMean, flowData, numValues, callNum):
+def meanFlowRate(prevFlowMean, flowData, numValues):
+    global callNum 
+    callNum += 1
     totalNum = callNum * numValues + numValues
     wavg1 = np.mean(flowData) * numValues
     wavg2 = prevFlowMean * numValues * callNum
@@ -73,10 +81,12 @@ def meanWater(flowMean, numValues, meanWaterUsed, totalNumValues):
     return meanWaterUsed
 
 # Update metadata in database with new values
-def updateMetaData(meanWaterUsed, numValues, totalNumValues, netWaterUsed, histogram, dt):
-    db.set_old_avg(meanWaterUsed, dt)
-    # store netWaterUsed in database from sql helper function
+def updateMetaData(meanWaterUsed, numValues, totalNumValues, netWaterUsed, histogram, newMaxFlow, dt):
+    db.set_old_avg(meanWaterUsed)
+    db.set_total(netWaterUsed)
     totalNumValues += numValues
-    # store totalNumValues in database from sql helper function
-    # store histogram in database from sql helper function
+    db.set_num_values(totalNumValues)
+    db.set_maximum(newMaxFlow)
+    db.set_hist(histogram)
+    db.set_dt(dt)
     return
