@@ -14,11 +14,13 @@ GET_AVG_QUERY = "SELECT value FROM meta WHERE name = 'avg'"
 GET_LAST_UPDATED_QUERY = "SELECT value from meta WHERE name = 'last_updated'"
 GET_TOTAL_QUERY = "SELECT value from meta WHERE name = 'total'"
 GET_HIST_INDEX_QUERY = "SELECT value from meta WHERE name = 'hist{}'"
+GET_MAX_QUERY = "SELECT value from meta WHERE name = 'max'"
 
 SET_AVG_QUERY = "UPDATE meta SET value='{}' WHERE name = 'avg'"
 SET_LAST_UPDATED_QUERY = "UPDATE meta SET value='{}' WHERE name = 'last_updated'"
 SET_TOTAL_QUERY = "UPDATE meta SET value='{}' WHERE name = 'total'"
 SET_HIST_INDEX_QUERY = "UPDATE meta SET value='{}' WHERE name = 'hist{}'"
+SET_MAX_QUERY = "UPDATE meta SET value='{}' WHERE name = 'max'"
 
 
 # ---------------------------------------------------------------------------------------
@@ -136,14 +138,28 @@ def set_total(total, dt):
 	query(db, SET_LAST_UPDATED_QUERY.format(dt))
 
 
-# returns tuple of (total, last_updated) of types (double, datetime)
+# returns tuple of (max, last_updated) of types (double, datetime)
+def get_total():
+	db = access_db()
+	return (query(db, GET_MAX_QUERY)[0][0], dt_to_string(query(db, GET_LAST_UPDATED_QUERY)[0][0]))
+
+
+# sets the max stored in the database
+def set_total(maximum, dt):
+	db = access_db()
+	query(db, SET_MAX_QUERY.format(maximum))
+	query(db, SET_LAST_UPDATED_QUERY.format(dt))
+
+
+
+# returns tuple of (hist value, last_updated) of types (double, datetime)
 def get_hist_index(index):
 	db = access_db()
 	print(GET_HIST_INDEX_QUERY.format(index))
 	return query(db, GET_HIST_INDEX_QUERY.format(index))[0][0]
 
 
-# sets the old total stored in the database
+# sets the histogram value at an index stored in the database
 def set_hist_index(index, val):
 	db = access_db()
 	query(db, SET_HIST_INDEX_QUERY.format(val, index))
