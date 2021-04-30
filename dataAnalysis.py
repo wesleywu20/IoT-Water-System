@@ -8,7 +8,7 @@
     - Total number of values in database to use in weighted mean calculations
     - Histogram (?) - this is the one I wanted to talk to Justin about '''
 
-import numpy
+import numpy as np
 import matplotlib.pyplot as plt
 import time
 import sql_helpers as db
@@ -20,6 +20,7 @@ from datetime import datetime, timedelta
 ''' Variables passed into functions from caller: '''
 # flowData = flow data points from database since start of session
 # numValues = number of values since the start of session - i.e. number of elements in flowData array: numValues = len(flowData)
+# callNum = the current iteration index of the caller program (frame number of graph) - starts at 1, maintained by calelr
 
 # prevFlowMean = previous flow mean value for session still stored in looping caller function
 # prevWaterUsed = prevous water used value for session still stored in looping caller function
@@ -31,21 +32,24 @@ from datetime import datetime, timedelta
 # meanWaterUsed = total number of values in db from db metadata
 
 # Running average flow rate
-def meanFlowRate(prevFlowMean, flowData, numValues): 
-    flowMean = numpy.mean(flowData + prevFlowMean * numValues)/2
+def meanFlowRate(prevFlowMean, flowData, numValues, callNum): # Broken - need to fix to incorporate using a way to track iterations for session
+    totalNum = callNum * numValues + numValues
+    wavg1 = np.mean(flowData) * numValues
+    wavg2 = prevFlowMean * numValues * callNum
+    flowMean = (wavg1 + wavg2)/totalNum
     print("The average flow rate for the session is", flowMean)
     return flowMean
 
 ''' For total water used, add current result to result from previous frame. '''
 # Total water used throughout session - integral of flow rate over time
 def totalWaterUsed(prevWaterUsed, flowData):
-    waterUsed = numpy.trapz(flowData) + prevWaterUsed
+    waterUsed = np.trapz(flowData) + prevWaterUsed
     print("You used", waterUsed, "Liters of water")
     return waterUsed
 
 # Maximum flow rate attained throughout session
 def maxFlow(prevMaxFlow, flowData):
-    curMaxFlow = numpy.amax(flowData)
+    curMaxFlow = np.amax(flowData)
     newMaxFlow = curMaxFlow if curMaxFlow > prevMaxFlow else prevMaxFlow
     return newMaxFlow
 
@@ -53,22 +57,18 @@ def maxFlow(prevMaxFlow, flowData):
 
 # Average temperature
 #def meanTemp(prevTempMean, tempData, numValues):
-#    tempMean = (numpy.mean(tempData) + prevTempMean * numValues)/2
-#    print(tempMean)
-#    return tempMean
 
 ''' For range, retreive previous max and min values and compare with current values. 
     Store new max and min values from new values + previous max and min for next frame use '''
 # Range of water temperatures
 #def rangeTemp(prevMaxTemp, prevMinTemp, tempData):
-#    maxComp = [prevMaxTemp, numpy.amax(tempData)]
-#    minComp = [prevMinTemp, numpy.amain(tempData)]
-#    tempRange = numpy.amax(maxComp) - numpy.amin(minComp)
+#    maxComp = [prevMaxTemp, np.amax(tempData)]
+#    minComp = [prevMinTemp, np.amain(tempData)]
+#    tempRange = np.amax(maxComp) - np.amin(minComp)
 #    print(tempRange)
 
 # Signifier that water is running
 def state(finalDataPoint):
-    # Need to initialize waterRunning?
     if finalDataPoint == 0:
         waterRunning = 0
     else:
