@@ -15,12 +15,14 @@ GET_LAST_UPDATED_QUERY = "SELECT value from meta WHERE name = 'last_updated'"
 GET_TOTAL_QUERY = "SELECT value from meta WHERE name = 'total'"
 GET_HIST_INDEX_QUERY = "SELECT value from meta WHERE name = 'hist{}'"
 GET_MAX_QUERY = "SELECT value from meta WHERE name = 'max'"
+GET_NUM_VALUES_QUERY = "SELECT value from meta WHERE name = 'num_values'"
 
 SET_AVG_QUERY = "UPDATE meta SET value='{}' WHERE name = 'avg'"
 SET_LAST_UPDATED_QUERY = "UPDATE meta SET value='{}' WHERE name = 'last_updated'"
 SET_TOTAL_QUERY = "UPDATE meta SET value='{}' WHERE name = 'total'"
 SET_HIST_INDEX_QUERY = "UPDATE meta SET value='{}' WHERE name = 'hist{}'"
 SET_MAX_QUERY = "UPDATE meta SET value='{}' WHERE name = 'max'"
+SET_NUM_VALUES_QUERY = "UPDATE meta SET value='{}' WHERE name = 'num_values'"
 
 
 # ---------------------------------------------------------------------------------------
@@ -124,6 +126,19 @@ def set_old_avg(avg, dt):
 	query(db, SET_LAST_UPDATED_QUERY.format(dt))
 
 
+# returns tuple of (old_avg, last_updated) of types (double, datetime)
+def get_num_values():
+	db = access_db()
+	return (query(db, GET_NUM_VALUES_QUERY)[0][0], dt_to_string(query(db, GET_LAST_UPDATED_QUERY)[0][0]))
+
+
+# sets the old average stored in the database
+def set_num_values(num_values, dt):
+	db = access_db()
+	query(db, SET_NUM_VALUES_QUERY.format(num_values))
+	query(db, SET_LAST_UPDATED_QUERY.format(dt))
+
+
 
 # returns tuple of (total, last_updated) of types (double, datetime)
 def get_total():
@@ -172,11 +187,12 @@ def get_hist():
 	return hist
 
 
-def set_hist(hist):
+def set_hist(hist, dt):
 	if(len(hist) != 24):
 		print("histogram has inappropriate length")
 	for i in range(24):
 		set_hist_index(i, hist[i])
+	query(db, SET_LAST_UPDATED_QUERY.format(dt))
 
 
 
