@@ -1,3 +1,13 @@
+''' This program demonstrates some of the data analysis functions from the data analysis program,
+    dataAnalysis.py. The functions are demonstrated in the order that they are included in the program.
+    Both session-scope and lifetime-scope functions are included. For both sets of functions, the iterative
+    values that the program uses would be changed and fed back into the functions and loops with each iteration
+    of the main program, synchronously with the updating cycles of the graph. As such, this program just shows
+    a single slice in time of a much larger process. '''
+
+''' Some aspects of the program could be implemented in a more streamlined manner, like the variables being set
+    after the print statements that could be set beforehand just as easily. However, this is kept for easy comprehensibility. '''
+
 import dataAnalysis as dA
 
 # Iterative Values:
