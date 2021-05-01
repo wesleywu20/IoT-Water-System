@@ -34,6 +34,8 @@ totalNumValues = 100
 
 # ============ Testing of session-scope functions: ============
 
+print("")
+
 flowMean = dA.meanFlowRate(prevFlowMean, flowData, numValues)
 print("Your mean flow rate is", flowMean, "Liters per minute")
 prevFlowMean = flowMean
@@ -70,3 +72,5 @@ print("Since installing this system, you have used", netWaterUsed, "Liters of wa
 
 meanWaterUsed = dA.meanWater(flowMean, numValues, meanWaterUsed, totalNumValues)
 print("The average water flow rate for all time is", meanWaterUsed, "Liters per minute")
+
+print("")
