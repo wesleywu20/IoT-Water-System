@@ -27,7 +27,7 @@ flowTimes = ["2021-04-16 15:41:44.952130", "2021-04-16 15:41:45.266081", "2021-0
              "2021-04-16 15:41:46.859528", "2021-04-16 15:41:46.890260", "2021-04-16 15:41:46.915434", "2021-04-16 15:41:46.938503"]
 for i in range(len(flowTimes)):
     flowTimes[i] = dt.datetime.strptime(flowTimes[i], '%Y-%m-%d %H:%M:%S.%f')
-histogram = 0 * [24]
+histogram = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 netWaterUsed = 3
 meanWaterUsed = 2
 totalNumValues = 100
@@ -55,8 +55,15 @@ else:
 # ============ Testing of lifetime-scope functions: ============
 
 histogram = dA.usageTimes(histogram, flowTimes)
-modeTime = np.amax(histogram) 
-print("You used water most commonly between", modeTime, "and", modeTime + 1, "o'clock")
+modeTime = np.where(histogram == np.amax(histogram))
+modeTime = modeTime[0]
+modeTime = modeTime[0]
+if modeTime > 12:
+    modeTime = modeTime - 12
+    dayNight = "PM"
+else:
+    dayNight = "AM"
+print("You used water most commonly between", modeTime, "and", modeTime + 1, dayNight)
 
 netWaterUsed = dA.totalWater(netWaterUsed, waterUsed)
 print("Since installing this system, you have used", netWaterUsed, "Liters of water")

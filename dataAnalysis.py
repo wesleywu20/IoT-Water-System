@@ -1,6 +1,6 @@
 import numpy as np
 import sql_helpers as db
-from datetime as dt
+import datetime as dt
 
 
 ''' For each new graph frame generated, calculate the following data '''
@@ -63,8 +63,8 @@ def state(finalDataPoint):
 
 # Times that water (or IoT water system) is most commonly used
 def usageTimes(histogram, flowTimes): # Pass in an array with all times water is used
-    for i in range(len(flowtimes)):
-        hourIndex = flowTimes[i].hour - 1
+    for i in range(len(flowTimes)):
+        hourIndex = flowTimes[i].hour
         histogram[hourIndex] += 1
     return histogram
 
