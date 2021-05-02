@@ -56,13 +56,12 @@ else:
 histogram = dA.usageTimes(histogram, flowTimes)
 modeTime = np.where(histogram == np.amax(histogram))
 modeTime = modeTime[0]
-modeTime = modeTime[0]
-if modeTime > 12:
-    modeTime = modeTime - 12
+if modeTime[0] > 12:
+    modeTime[0] = modeTime[0] - 12
     dayNight = "PM"
 else:
     dayNight = "AM"
-print("You used water most commonly between", modeTime, "and", modeTime + 1, dayNight)
+print("You used water most commonly between", modeTime[0], "and", modeTime[0] + 1, dayNight)
 
 netWaterUsed = dA.totalWater(netWaterUsed, waterUsed)
 print("Since installing this system, you have used", netWaterUsed, "Liters of water")
