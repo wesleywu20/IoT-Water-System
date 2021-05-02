@@ -53,10 +53,7 @@ def maxFlow(prevMaxFlow, flowData):
 
 # Signifier that water is running
 def state(finalDataPoint):
-    if finalDataPoint == 0:
-        waterRunning = 0
-    else:
-        waterRunning = 1
+    waterRunning = 0 if finalDataPoint == 0 else 1:
     return waterRunning
 
 # =================== Data that spans beyond the current session: ===================
