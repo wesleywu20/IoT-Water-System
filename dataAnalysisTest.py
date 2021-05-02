@@ -15,10 +15,10 @@ import dataAnalysis as dA
 # Iterative Values:
 flowData = [1,2,3,4,5,6,7,8,9,0,2,14,6,7,3,2,4,7,3,4,4,3,14,13,23,12,10]    # Actual flow data is taken from the database
 numValues = len(flowData)                                                   # Taken either From length of flowData or specified number of values in window
-prevFlowMean = 0                                                            # Taken from current value of prevFlowMean from iterative caller function
+flowMean = 0                                                            # Taken from current value of prevFlowMean from iterative caller function
 freq = 30000                                                                # Specified fixed frequency of data samples per minute
-prevWaterUsed = 1                                                           # Taken from current value of prevWaterUsed from iterative caller function
-prevMaxFlow = 18.67                                                         # Taken from current value of prevMaxFlow from iterative caller function
+waterUsed = 1                                                           # Taken from current value of prevWaterUsed from iterative caller function
+flowMax = 18.67                                                         # Taken from current value of prevMaxFlow from iterative caller function
 
 # MetaData Values:
 flowTimes = ["2021-04-16 15:41:44.952130", "2021-04-16 15:41:45.266081", "2021-04-16 15:41:45.610755", "2021-04-16 15:41:45.957314",
@@ -36,17 +36,14 @@ totalNumValues = 100
 
 print("")
 
-flowMean = dA.meanFlowRate(prevFlowMean, flowData, numValues)
+flowMean = dA.meanFlowRate(flowMean, flowData, numValues)
 print("Your mean flow rate is", flowMean, "Liters per minute")
-prevFlowMean = flowMean
 
-waterUsed = dA.totalWaterUsed(prevWaterUsed, flowData, freq)
+waterUsed = dA.totalWaterUsed(waterUsed, flowData, freq)
 print("You have used", waterUsed, "Liters of water")
-prevWaterUsed = waterUsed
 
-flowMax = dA.maxFlow(prevMaxFlow, flowData)
+flowMax = dA.maxFlow(flowMax, flowData)
 print("The maximum flow rate you reached is", flowMax, "Liters per minute")
-prevMaxFlow = flowMax
 
 waterRunning = dA.state(flowData[len(flowData) - 1])
 if waterRunning:
