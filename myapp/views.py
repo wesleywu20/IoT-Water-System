@@ -134,9 +134,7 @@ def index(request):
     )
 
 
-    fig2=go.Figure()
-    fig2.add_scatter(x=xs, y=ys, mode='lines', name='current values')
-
+    
     fig2.update_layout(
     #    title_text="Graph of Water Levels",
         width=900,
