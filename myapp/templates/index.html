@@ -16,6 +16,10 @@
 				sessionStorage.fonts = true;
 			}
 		});
+
+		window.setTimeout(function () {
+			window.location.reload();
+		}, 15000);
 	</script>
 
 	<!-- CSS Files -->
@@ -251,36 +255,6 @@
 								</div>
 							</div>
 						</li>
-						<li class="nav-item dropdown hidden-caret">
-							<a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#" aria-expanded="false">
-								<div class="avatar-sm">
-									<img src="../assets/img/water.jpg" alt="..." class="avatar-img rounded-circle">
-								</div>
-							</a>
-							<ul class="dropdown-menu dropdown-user animated fadeIn">
-								<div class="dropdown-user-scroll scrollbar-outer">
-									<li>
-										<div class="user-box">
-											<div class="avatar-lg"><img src="../assets/img/profile.jpg" alt="image profile" class="avatar-img rounded"></div>
-											<div class="u-text">
-												<!-- <h4>Hizrian</h4> -->
-												<p class="text-muted">hello@example.com</p><a href="profile.html" class="btn btn-xs btn-secondary btn-sm">View Profile</a>
-											</div>
-										</div>
-									</li>
-									<!-- <li>
-										<div class="dropdown-divider"></div>
-										<a class="dropdown-item" href="#">My Profile</a>
-										<a class="dropdown-item" href="#">My Balance</a>
-										<a class="dropdown-item" href="#">Inbox</a>
-										<div class="dropdown-divider"></div>
-										<a class="dropdown-item" href="#">Account Setting</a>
-										<div class="dropdown-divider"></div>
-										<a class="dropdown-item" href="#">Logout</a>
-									</li> -->
-								</div>
-							</ul>
-						</li>
 					</ul>
 				</div>
 			</nav>
@@ -487,11 +461,11 @@
 
 
 								</div>
-									<div class="card-category">Average Daily water Usage (Gallons) </div>
+								<div class="card-category">Average Daily water Usage (Liters) </div>
 									<div class="d-flex flex-wrap justify-content-around pb-2 pt-4">
 										<div class="px-2 pb-2 pb-md-0 text-center">
 											<div id="circles-1"></div>
-											<h6 class="fw-bold mt-3 mb-0">Flow Mean</h6>
+											<h6 class="fw-bold mt-3 mb-0">Flow Mean (Liters/min)</h6>
 										</div>
 										<div class="px-2 pb-2 pb-md-0 text-center">
 											<div id="circles-2"></div>
@@ -499,10 +473,14 @@
 										</div>
 										<div class="px-2 pb-2 pb-md-0 text-center">
 											<div id="circles-3"></div>
-											<h6 class="fw-bold mt-3 mb-0">maxFlow</h6>
+											<h6 class="fw-bold mt-3 mb-0">maxFlow (Liters/min)</h6>
 										</div>
 									</div>
 								</div>
+                                                                <div id="chart-container">
+                                                                        <center> {{graph3|safe}} </center>
+
+                                                                </div>
 							</div>
 						</div>
 						<div class="col-md-6">
@@ -530,7 +508,6 @@
 													<center> {{graph2|safe}} </center>
 												<!-- <canvas id="totalIncomeChart"></canvas> -->
 											</div>
-										</div>
 									</div>
 								</div>
 							</div>

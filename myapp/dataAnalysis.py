@@ -58,7 +58,7 @@ def state(finalDataPoint):
 
 # Times that water (or IoT water system) is most commonly used
 def usageTimes(histogram, flowTimes): # Pass in an array with all times water is used
-    for i in range(len(flowtimes)):
+    for i in range(len(flowTimes)):
         hourIndex = flowTimes[i].hour - 1
         histogram[hourIndex] += 1
     return histogram

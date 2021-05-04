@@ -58,7 +58,11 @@ def access_db():
 	if conn is None:
 		global database_name
 		conn = establish_connection(database_name)
-
+	
+	try:
+		conn.execute("SELECT * FROM water_flow")
+	except sqlite3.ProgrammingError as e:
+		conn = establish_connection(database_name)
 	return conn
 
 

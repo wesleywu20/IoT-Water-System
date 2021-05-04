@@ -26,17 +26,9 @@ import matplotlib
 
 import plotly
 import plotly.graph_objects as go
+import plotly.express as px
 
 from myapp import dataanalysis
-flowData=[5,6,10,8,9,2,3]
-flowMean=dataanalysis.meanFlowRate(2.5,flowData,7)
-flowMean=str.format("{:.2f}".format(flowMean))
-totalWaterUsed=dataanalysis.totalWaterUsed(5, flowData, 5)
-totalWaterUsed=str.format("{:.2f}".format(totalWaterUsed))
-maxFlow=dataanalysis.maxFlow(10, flowData)
-maxFlow=str.format("{:.2f}".format(maxFlow))
-
-
 
 
 # ----------------- graphing_methods.py ---------------------------------
@@ -84,10 +76,33 @@ def index(request):
     
     now = dt.datetime.now()
     times, flow_rate = db.get_range((now - dt.timedelta(seconds = 100000000)).strftime('%Y-%m-%d %H:%M:%S.%f'), now)
+    db.close_db()
+
+    flowData = flow_rate
+    flowMean=dataanalysis.meanFlowRate(2.5,flowData,7)
+    flowMean=str.format("{:.2f}".format(flowMean))
+    totalWaterUsed=dataanalysis.totalWaterUsed(5, flowData, 5)
+    totalWaterUsed=str.format("{:.2f}".format(totalWaterUsed))
+    maxFlow=dataanalysis.maxFlow(10, flowData)
+    maxFlow=str.format("{:.2f}".format(maxFlow))
+
+    #print("Flow Times:")
+    #print(times)
+
+    usageTimes = da.usageTimes([0 for x in range(24)], times)
+    hours = [x for x in range(24)]
+
+    #fig3 = go.Figure()
+    #fig3.add_scatter(x=hours, y=usageTimes, mode='lines', name='Time of Water Use')
+    fig3 = px.bar(x=hours, y=usageTimes, labels={'x':'Hour of Day', 'y':'Count'})
+    fig3.update_layout(
+        title_text="Time of Water Use",
+    )
+
     temp = []
     for flow in flow_rate:
         temp.append(flow)
-        int_flow_rate.append(integrate.simps(temp))
+        int_flow_rate.append(integrate.simps(temp) / 1000)
 
     line.set_xdata(times)
     line.set_ydata(flow_rate)
@@ -137,8 +152,8 @@ def index(request):
     
     fig2.update_layout(
     #    title_text="Graph of Water Levels",
-        width=900,
-        height=700,
+        width=550,
+        height=550,
     )
 
     config={'responsive':True}
@@ -147,7 +162,8 @@ def index(request):
 
     graph1=plotly.offline.plot(fig1, auto_open=False, output_type="div", config=config)
     graph2= plotly.offline.plot(fig2, auto_open=False, output_type="div", config=config)
-    return render(request, 'index.html', {'active_page': 'index.html', 'graph1':graph1, 'graph2':graph2, "flowMean":flowMean, "totalWaterUsed":totalWaterUsed, "maxFlow":maxFlow})
+    graph3 = plotly.offline.plot(fig3, auto_open=False, output_type="div", config=config)
+    return render(request, 'index.html', {'active_page': 'index.html', 'graph1':graph1, 'graph2':graph2, 'graph3':graph3, "flowMean":flowMean, "totalWaterUsed":totalWaterUsed, "maxFlow":maxFlow})
 
 
 
